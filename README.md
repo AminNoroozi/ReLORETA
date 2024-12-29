@@ -3,6 +3,8 @@ The brain signals are usually distorted on their way from the inside of the brai
 
 To overcome this problem, the ReLORETA algorithm was introduced by Noroozi et al, 2022 to accurately calculate the brain signals inside the brain, which are called source signals. If the brain signal is produced by an abnormal activity like a seizure, the ReLORETA algorithm can localize the exact source of the seizure as well, which is referred to as brain source localization. 
 
+ReLORETA is an iterative algorithm and can be briefly explained as follows: ReLORETA uses the eLORETA algorithm to reconstruct the source signals using the original EEG signals. Once the source signals inside the brain have been reconstructed, ReLORETA uses them to regenerate EEG signals on the surface of the brain using the leadfield matrix. ReLORETA then compares the regenerated EEG signals with the original EEG signals. Is the source signals have been calculated correctly, then the regenerated EEG signals should be close to the original EEG signals. If the regenerated EEG signals are not close enough to the original EEG signals, then ReLORETA updates the leadfield matrix (using the Levenberg-Marquardt algorithm) and reconstructs the source signals again. This process is repeated until the reconstructed source signals can regenerate EEG signals which are close enough to the original EEG signals. 
+
 According to what was discussed above, the ReLORETA algorithm can be used for two application: 
 
 __Application 1: Classification problems__: If you have EEG signals from some subjects and want to use their signals for classification, for example, classification of mental disorders, emotion, movement type, etc. In this case, you can calculate the source signals using ReLORETA and use them for classification instead of the EEG signals. __This can boost your classification accuracy between 1 to 15%__
@@ -56,15 +58,15 @@ __y_rel__:The final source signals calculated by ReLORETA
 
 __K_rel__:The final leadfield matrix calculated by ReLORETA
 
+__K_all__:The leadfield matrix calculated (updated) by ReLORETA for all iterations
+
 __y_rel_all__:The source signals calculated by ReLORETA for all iterations
 
-__X_rel__: The final reconstructed EEG signals by ReLORETA
+__X_rel__: The final regenerated EEG signals by ReLORETA
 
-__X_rel_all__:The reconstructed EEG signals for all iterations
+__X_rel_all__:The regenerated EEG signals by ReLORETA for all iterations
 
-__K_all__:The leadfield matrix calculated by ReLORETA for all iterations
-
-__pow__: The final power signal calculated by ReLORETA
+__pow__: The final source power signal calculated by ReLORETA
 
 __pow_all__: The source power signal for all iterations. The power signal shows the power of source signals in all source points (voxels). 
 
@@ -250,12 +252,39 @@ You can do it as follows:
 model1=core.ReLORETA(lr=1e7,max_iter=50)
 model1.fit(data1,lead_field)
 ```
-Here I adjusted the learning rate and set it to 1e7. Please read the following on how to adjust the learning rate.
 
+Now you can compare the reconstructed EEG signals and the original EEG signals in different iterations. The reconstructed EEG signal in the first step is produced by eLORETA. 
 
+Here I adjusted the learning rate and set it to 1e7. See the note below for tips on adjusting the learning rate. 
+
+You can get the reconstructed source signals using the y_rel attribute as follows: 
 
 ```python
-print("Hello, World!")
-print("amin")
+model1.y_rel
 ```
-Ok Let's continue
+The reconstructed source signal has 3 dimensions at each source point. Therefore the y_rel shape is 246*100 (i.e. (82*3)*100). If you want a 1-dimensional source signal at each source point you can calculate the Euclidean norm of the source signals at all source points as follows: 
+```python
+y_1D=[]
+b=model1.y
+n_source=82
+for i in range(n_source): 
+  y_1D.append(np.linalg.norm(b[i*3:(i*3)+3,:], axis=0))
+
+y_1D=np.array(y_1D) # The 1-dimensional source signals at 82 source points. y_1D size is 82*100
+```
+
+You can also plot the original EEG data and the reconstructed EEG data by ReLORETA using the following: 
+
+```python
+# Reconstruct the original EEG data for electrode 1 and the reconstructed EEG signals at iteration 10
+import matplotlib.pyplot as plt
+iteration=10
+electrode_no=1
+plt.plot(data1[electrode_no,:],label='Orignal EEG signal for the first electrode')
+plt.plot(model1.X_rel_all[iteration][electrode_no,:], label='Reconstructed EEG signal for the first electrode at iteration 10')
+plt.legend(loc='upper left', bbox_to_anchor=(1, 1))
+```
+
+In the example above, the reconstructed and original EEG data are close even at the first iteration. This is because we used the same head model to generate the EEG data (forward problem) and reconstruct the source signals (inverse problem). In reality, these two head models are rarely similar. 
+
+__NOTE__: To adjust the learning rate, look at the regenerated EEG signals in the first few iterations, for example, 10 iterations. If the regenerated EEG signal is gradually approaching to and becoming more similar to the original EEG signals, it shows the learning rate is suitable. If the regenerated EEG signals in different iterations show no changes or drastic changes, it means the learning rate is overly small or large, respectively. Alternatively, you can look at the objective function value (the E attribute) in different iterations. If it decreases gradually in each iteration, it shows the learning rate is suitable. If it shows very small or drastic changes in each iteration (compared to the previous iteration), it means the learning rate is overly small or large, respectively
