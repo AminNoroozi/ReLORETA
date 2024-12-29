@@ -1,4 +1,8 @@
 # ReLORETA
+This page describes how to use the reloreta module to apply the ReLORETA algorithm introduced by Noroozi et al, 2022. You can see the original ReLORETA article "A Robust eLORETA Technique for Localization of Brain Sources in the Presence of Forward Model Uncertainties" at the following link: 
+https://ieeexplore.ieee.org/document/9899719
+
+## Why you need ReLORETA
 The brain signals are usually distorted on their way from the inside of the brain to the surface of the brain for a variety of reasons. As a result, the EEG method, which collects the brain signals on the surface of the brain (scalp), might result in misleading and distorted signals which are different from the original brain signals inside the brain. 
 
 To overcome this problem, the ReLORETA algorithm was introduced by Noroozi et al, 2022 to accurately calculate the brain signals inside the brain, which are called source signals. If the brain signal is produced by an abnormal activity like a seizure, the ReLORETA algorithm can localize the exact source of the seizure as well, which is referred to as brain source localization. 
