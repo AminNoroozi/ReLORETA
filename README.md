@@ -1,3 +1,15 @@
+# ReLORETA
+The brain signals are usually distorted on their way from the inside of the brain to the surface of the brain for a variety of reasons. As a result, the EEG method, which collects the brain signals on the surface of the brain (scalp), might result in misleading and distorted signals which are different from the original brain signals inside the brain. 
+
+To overcome this problem, the ReLORETA algorithm was introduced by Noroozi et al, 2022 to accurately calculate the brain signals inside the brain, which are called source signals. If the brain signal is produced by an abnormal activity like a seizure, the ReLORETA algorithm can localize the exact source of the seizure as well, which is referred to as brain source localization. 
+
+According to what was discussed above, the ReLORETA algorithm can be used for two application: 
+
+__Application 1: Classification problems__: If you have EEG signals from some subjects and want to use their signals for classification, for example, classification of mental disorders, emotion, movement type, etc. In this case, you can calculate the source signals using ReLORETA and use them for classification instead of the EEG signals. __This can boost your classification accuracy between 1 to 15%__
+
+__Application 2: Source localization__: If you want to accurately localize the source of abnormal activities such as the seizure inside the brain. 
+
+
 ## How to use the reloreta module
 
 You can install the package using the following command in Python: 
@@ -12,7 +24,7 @@ After the installation is completed, you need to import the core module from the
 ```python
 from reloreta import core
 ```
-### Parameters, attributes, and methods
+### Parameters
 To apply the ReLORETA algorithm, you need to create an object by calling the core module and then the ReLORETA class which uses the following parameters:
 ```python
 core.ReLORETA(lambda2 = 0.05, dimension=3,n_source=82, epsilon=1e-29, max_iter=100,lambda1=1,lr=1e8)
@@ -32,6 +44,25 @@ __epsilon__:  the threshold to stop ReLORETA. Unless there is a good justificati
 __max_iter__: The maximum number of iterations before stopping the algorithm (default 100)
 
 __lr__: ReLORETA learning rate (default 1e8. However, it needs adjustment by the user as it can significantly vary depending on the EEG data. See the example below)
+
+### attributes
+The ReLORETA object uses the following attributes: 
+
+__E__: The ReLORETA objective function values for all iterations
+
+__y_rel__:The final source signals calculated by ReLORETA
+
+__K_rel__:The final leadfield matrix calculated by ReLORETA
+
+__y_rel_all__:The source signals calculated by ReLORETA for all iterations
+
+__X_rel__: The final reconstructed EEG signals by ReLORETA
+
+__X_rel_all__:The reconstructed EEG signals for all iterations
+
+__K_all__:The leadfield matrix calculated by ReLORETA for all iterations
+
+__pow_all__: The source power signal for all iterations. The power signal shows the power of source signals in all source points (voxels). 
 
 ### Example:
 Assume you have gathered EEG data from subjects using 61 electrodes, namely, 'Fp1', 'AF3', 'AF7', 'Fz', 'F1', 'F3', 'F5', 'F7', 'FC1', 'FC3', 'FC5', 'FT7', 'Cz',
@@ -164,7 +195,28 @@ print("First source point contributions (shape):", first_source_contributions.sh
 np.savetxt("lead_field_3d.csv", lead_field, delimiter=",")
 ```
 
-As the leadfield matrix is simulated, the reconstructed source signals are not accurate. ReLORETA will iteratively update the leadfield matrix to achieve an accurace estimation of the source signals. 
+As the leadfield matrix is simulated, the reconstructed source signals are not accurate initially. ReLORETA will iteratively update the leadfield matrix to achieve an accurate estimation of the source signals. 
+
+__Step 2__: Import EEG data (and the real source location if available and you want to calculate the localization error). 
+You can download three sample EEG data and corresponding source locations from the data folder and import them into Python. 
+__NOTE__:If you are calculating the source signals for classification problems, you don't need the real source location. You can import the data as follows: 
+
+```python
+from scipy.io import loadmat
+data = loadmat('/content/data1.mat') # Replace the data path with the path on your system
+data1=data['datat1']
+```
+__Step 3__: Apply the ReLORETA algorithm 
+
+You can do it as follows: 
+```python
+model1=core.ReLORETA(lr=1e7,max_iter=50)
+model1.fit(data1,lead_field)
+```
+Here I adjusted the learning rate and set it to 1e7. Please read the following on how to adjust the learning rate.
+
+
+
 ```python
 print("Hello, World!")
 print("amin")
