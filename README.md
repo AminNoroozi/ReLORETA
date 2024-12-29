@@ -311,8 +311,8 @@ In this case, you can import the data as follows:
 
 ```python
 from scipy.io import loadmat
-# Replace 'your_file.mat' with your MATLAB file path
-data = loadmat('/content/data1.mat')
+
+data = loadmat('/content/data1.mat') # Replace the data path with the path on your system
 loc=loadmat('/content/loc1.mat')
 data1=data['datat1']
 loc1=loc['loc1']
