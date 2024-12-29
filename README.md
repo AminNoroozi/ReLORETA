@@ -19,11 +19,17 @@ core.ReLORETA(lambda2 = 0.05, dimension=3,n_source=82, epsilon=1e-29, max_iter=1
 ```
 where 
 lambda2: eLORETA regularisation parameter (default 0.05)
+
 dimension: The Leadfield matrix dimension (default 3. See the example below)
+
 lambda1: ReLORETA regularisation parameter
+
 n_source: number of voxels (dipoles or source points) set by the user. (default 82)
+
 epsilon:  the threshold to stop ReLORETA. Unless there is a good justification, it is usually set to a high value to let max_iter stop the algorithm (default 1e-29). 
+
 max_iter: The maximum number of iterations before stopping the algorithm (default 100)
+
 lr: ReLORETA learning rate (default 1e8. However, it needs adjustment by the user as it can significantly vary depending on the EEG data. See the example below)
 
 ### Example:
