@@ -1,6 +1,17 @@
-## How to use this project
+## How to use the reloreta module
 
-This project demonstrates how to print "Hello, World!" in Python.
+You can install the package using the following command in Python: 
+```python
+pip install reloreta
+```
+or using the following command in IPython
+```python
+!pip install reloreta
+```
+After the installation is completed, you can import the module as follows: 
+```python
+import reloreta
+```
 
 ### Python Code Example:
 ```python
