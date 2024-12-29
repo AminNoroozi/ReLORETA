@@ -25,6 +25,7 @@ After the installation is completed, you need to import the core module from the
 from reloreta import core
 ```
 ### Parameters
+
 To apply the ReLORETA algorithm, you need to create an object by calling the core module and then the ReLORETA class which uses the following parameters:
 ```python
 core.ReLORETA(lambda2 = 0.05, dimension=3,n_source=82, epsilon=1e-29, max_iter=100,lambda1=1,lr=1e8)
@@ -46,6 +47,7 @@ __max_iter__: The maximum number of iterations before stopping the algorithm (de
 __lr__: ReLORETA learning rate (default 1e8. However, it needs adjustment by the user as it can significantly vary depending on the EEG data. See the example below)
 
 ### attributes
+
 The ReLORETA object uses the following attributes: 
 
 __E__: The ReLORETA objective function values for all iterations
@@ -62,7 +64,42 @@ __X_rel_all__:The reconstructed EEG signals for all iterations
 
 __K_all__:The leadfield matrix calculated by ReLORETA for all iterations
 
+__pow__: The final power signal calculated by ReLORETA
+
 __pow_all__: The source power signal for all iterations. The power signal shows the power of source signals in all source points (voxels). 
+
+
+
+### Methods
+
+The ReLORETA object provides the following methods: 
+
+__eloreta_source_localization(eeg_data, leadfield, noise_cov)__: Calculated the source signals using the eLORETA algorithm where: 
+
+eeg_data (numpy.ndarray): EEG data matrix (channels x time points)
+
+leadfield (numpy.ndarray): Lead field matrix (channels x sources)
+
+noise_cov (numpy.ndarray): Noise covariance matrix (channels x channels) It is usually initialized with an identity matrix 
+
+__fit(eeg_data, leadfield,source_points=[],real_source=[])__: Runs the ReLORETA algorithm where
+
+X (numpy.ndarray): EEG data matrix (size: channels x time points)
+
+leadfield (numpy.ndarray): Lead field matrix (size: channels x sources)
+
+source_points: The source points (voxels) 3D coordinates (size: sources x 3)
+
+real_source: The real source 3D coordinates (size: 1 x 3)
+
+__NOTE__: If you are using ReLORETA for classification, don't input these two arguments and leave them empty. 
+
+__power()__: Calculate the power of the source signals 
+
+__localise(source_points)__: Localise the source according to the source space (source points) provided
+
+__localisation_error(source_points, real_source)__: Calculates the error between the localized source and the real source. 
+
 
 ### Example:
 Assume you have gathered EEG data from subjects using 61 electrodes, namely, 'Fp1', 'AF3', 'AF7', 'Fz', 'F1', 'F3', 'F5', 'F7', 'FC1', 'FC3', 'FC5', 'FT7', 'Cz',
