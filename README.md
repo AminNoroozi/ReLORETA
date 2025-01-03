@@ -92,7 +92,7 @@ eeg_data (numpy.ndarray): EEG data matrix (channels x time points)
 
 leadfield (numpy.ndarray): Lead field matrix (channels x sources)
 
-noise_cov (numpy.ndarray): Noise covariance matrix (channels x channels) It is usually initialized with an identity matrix 
+noise_cov (numpy.ndarray): Noise covariance matrix (channels x channels) It is usually set to an identity matrix 
 
 __fit(eeg_data, leadfield,source_points=[],real_source=[])__: Runs the ReLORETA algorithm where
 
