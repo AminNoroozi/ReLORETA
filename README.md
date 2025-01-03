@@ -7,9 +7,9 @@ The brain signals are usually distorted on their way from the inside of the brai
 
 To overcome this problem, the ReLORETA algorithm was introduced by Noroozi et al, 2022 to accurately calculate the brain signals inside the brain, which are called source signals. If the brain signal is produced by an abnormal activity like a seizure, the ReLORETA algorithm can localize the exact source of the seizure as well, which is referred to as brain source localization. 
 
-ReLORETA is an iterative algorithm and can be briefly explained as follows: ReLORETA uses the eLORETA algorithm to reconstruct the source signals using the original EEG signals. Once the source signals inside the brain have been reconstructed, ReLORETA uses them to regenerate EEG signals on the surface of the brain using the leadfield matrix. ReLORETA then compares the regenerated EEG signals with the original EEG signals. Is the source signals have been calculated correctly, then the regenerated EEG signals should be close to the original EEG signals. If the regenerated EEG signals are not close enough to the original EEG signals, then ReLORETA updates the leadfield matrix (using the Levenberg-Marquardt algorithm) and reconstructs the source signals again. This process is repeated until the reconstructed source signals can regenerate EEG signals which are close enough to the original EEG signals. 
+ReLORETA is an iterative algorithm and can be briefly explained as follows: ReLORETA uses the eLORETA algorithm to reconstruct the source signals using the original EEG signals. Once the source signals inside the brain have been reconstructed, ReLORETA uses them to regenerate EEG signals on the surface of the brain using the leadfield matrix. ReLORETA then compares the regenerated EEG signals with the original EEG signals. If the source signals have been calculated correctly, then the regenerated EEG signals should be close to the original EEG signals. If the regenerated EEG signals are not close enough to the original EEG signals, then ReLORETA updates the leadfield matrix (using the Levenberg-Marquardt algorithm) and reconstructs the source signals again. This process is repeated until the reconstructed source signals can regenerate EEG signals which are close enough to the original EEG signals. 
 
-According to what was discussed above, the ReLORETA algorithm can be used for two application: 
+According to what was discussed above, the ReLORETA algorithm can be used for two applications: 
 
 __Application 1: Classification problems__: If you have EEG signals from some subjects and want to use their signals for classification, for example, classification of mental disorders, emotion, movement type, etc. In this case, you can calculate the source signals using ReLORETA and use them for classification instead of the EEG signals. __This can boost your classification accuracy between 1 to 15%__
 
@@ -86,7 +86,7 @@ __pow_all__: The source power signal for all iterations. The power signal shows 
 
 The ReLORETA object provides the following methods: 
 
-__eloreta_source_localization(eeg_data, leadfield, noise_cov)__: Calculated the source signals using the eLORETA algorithm where: 
+__eloreta_source_localization(eeg_data, leadfield, noise_cov)__: Calculates the source signals using the eLORETA algorithm where: 
 
 eeg_data (numpy.ndarray): EEG data matrix (channels x time points)
 
