@@ -1,3 +1,5 @@
+Amin Noroozi Google Scholar: https://scholar.google.com/citations?user=sBOX2psAAAAJ&hl=en
+Amin Noroozi Linkdln: https://www.linkedin.com/in/amin-n-148350218/
 # ReLORETA
 This page describes how to use the reloreta module to apply the ReLORETA algorithm introduced by Noroozi et al, 2022. You can see the original ReLORETA article "A Robust eLORETA Technique for Localization of Brain Sources in the Presence of Forward Model Uncertainties" at the following link: 
 https://ieeexplore.ieee.org/document/9899719
